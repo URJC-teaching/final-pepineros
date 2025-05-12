@@ -30,6 +30,7 @@
 namespace bt_nav_wp
 {
 
+// Clase Move que se encarga de mover al Kobuki a una posición determinada
 class Move : public bt_nav_wp::BtActionNode<nav2_msgs::action::NavigateToPose>
 {
 public:
@@ -41,10 +42,12 @@ public:
   void on_tick() override;
   BT::NodeStatus on_success() override;
 
+  // Metodo que define los puertos del nodo (los que usa el nodo para comunicarse con otros nodos)
   static BT::PortsList providedPorts()
   {
     return BT::PortsList(
       {
+        // Puerto de entrada (objetivo al que se quiere mover)
         BT::InputPort<geometry_msgs::msg::PoseStamped>("goal")
       });
   }
@@ -53,6 +56,6 @@ private:
 };
 
 
-}  // namespace bt_nav_wp
+}
 
-#endif  // BT_NAV__MOVE_HPP_
+#endif

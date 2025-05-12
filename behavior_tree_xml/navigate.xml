@@ -4,26 +4,35 @@
   <BehaviorTree ID="BehaviorTree">
     <Repeat num_cycles="5">
       <Sequence>
+
+        <!--Primer Waypoint-->
         <GetWaypoint x="-5.31"
                      y="-3.9"
                      yaw="-1.5708"
                      waypoint="{wp}"/>
         <Move goal="{wp}"/>
+
+        <!--Segundo Waypoint-->
         <GetWaypoint x="-4.46"
                      y="-6.47"
                      yaw="0.0"
                      waypoint="{wp}"/>
         <Move goal="{wp}"/>
+
+        <!--Tercer Waypoint-->
         <GetWaypoint x="-0.26"
                      y="-5.98"
                      yaw="1.5708"
                      waypoint="{wp}"/>
         <Move goal="{wp}"/>
+
+        <!--Cuarto Waypoint-->
         <GetWaypoint x="-0.551"
                      y="-2.39"
                      yaw="3.14"
                      waypoint="{wp}"/>
         <Move goal="{wp}"/>
+        
       </Sequence>
     </Repeat>
   </BehaviorTree>

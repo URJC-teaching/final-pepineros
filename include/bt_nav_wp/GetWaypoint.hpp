@@ -25,6 +25,8 @@
 namespace bt_nav_wp
 {
 
+// Clase GetWaypoint  que será un nodo de acción en el behavior tree
+// Se encarga de obtener un waypoint (punto de paso) a partir de coordenadas x, y y yaw
 class GetWaypoint : public BT::ActionNodeBase
 {
 public:
@@ -35,22 +37,28 @@ public:
   void halt();
   BT::NodeStatus tick();
 
+  // Definimos los puertos del nodo (los que usa el nodo para comunicarse con otros nodos)
   static BT::PortsList providedPorts()
   {
     return BT::PortsList(
       {
+        // Puertos de entrada
         BT::InputPort<double>("x"),
         BT::InputPort<double>("y"),
         BT::InputPort<double>("yaw"),
+
+        // Puerto de salida
         BT::OutputPort<geometry_msgs::msg::PoseStamped>("waypoint")
       });
   }
 
 private:
+  // Variable para almacenar el waypoint
   geometry_msgs::msg::PoseStamped wp_;
+
+  // Variables para almacenar las coordenadas x, y y la orientación yaw
   double x_, y_, yaw_;
 };
 
-}  // namespace bt_nav_wp
-
-#endif  // BT_NAV__GETWAYPOINT_HPP_
+}
+#endif

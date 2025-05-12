@@ -28,48 +28,76 @@
 namespace bt_nav_wp
 {
 
+// Constructor de la clase GetWaypoint
 GetWaypoint::GetWaypoint(
-  const std::string & xml_tag_name,
-  const BT::NodeConfiguration & conf)
-: BT::ActionNodeBase(xml_tag_name, conf)
-{
-  rclcpp::Node::SharedPtr node;
-  config().blackboard->get("node", node);
 
-  getInput<double>("x", x_);
-  getInput<double>("y", y_);
+  // Nombre del nodo en el behavior tree 
+  const std::string & xml_tag_name,
+  
+  // Configuración del nodo, que hereda de ActionNodeBase (para interactuar con el Action Server)
+  const BT::NodeConfiguration & conf)  
+: BT::ActionNodeBase(xml_tag_name, conf)
+
+{
+  // Creamos un puntero a nodo compartido
+  rclcpp::Node::SharedPtr node;
+  
+  // Obtenemos el nodo de configuración desde el Blackboard
+  // Blackboard --> espacio de memoria compartido entre los nodos
+  config().blackboard->get("node", node); 
+
+  // Obtenemos valores "x" "y" "yaw" del behavior tree y los guardamos en x_ y_ y yaw_
+  getInput<double>("x", x_);  
+  getInput<double>("y", y_);  
   getInput<double>("yaw", yaw_);
 
+  // Establecemos que las coordenadas del wp están en el sistema de referencia "map"
   wp_.header.frame_id = "map";
-  wp_.pose.orientation.w = 1.0;
+  
+  // Inicializamos la orientación con un cuaternión de valor 1.0
+  wp_.pose.orientation.w = 1.0;  
 
-  wp_.pose.position.x = x_;
-  wp_.pose.position.y = y_;
-  wp_.pose.position.z = 0.0;
+  // Asignamos las coordenadas del waypoint (x, y) y la orientación (yaw)
+  wp_.pose.position.x = x_;  
+  wp_.pose.position.y = y_; 
+  wp_.pose.position.z = 0.0; 
 
+  // Creamos un objeto de tipo cuaternión para la orientación
   tf2::Quaternion q;
-  q.setRPY(0.0, 0.0, yaw_);
-  wp_.pose.orientation.x = q.x();
-  wp_.pose.orientation.y = q.y();
-  wp_.pose.orientation.z = q.z();
-  wp_.pose.orientation.w = q.w();
-}
 
+  // Establecemos el cuaternión usando los valores de Roll, Pitch y Yaw
+  q.setRPY(0.0, 0.0, yaw_);
+
+  // Asignamos las componentes del cuaternion
+  wp_.pose.orientation.x = q.x();  
+  wp_.pose.orientation.y = q.y();  
+  wp_.pose.orientation.z = q.z();  
+  wp_.pose.orientation.w = q.w();
+
+
+// Generalmente se usa este metodo para detener o limpiar la acción
 void
 GetWaypoint::halt()
 {
 }
 
+// Método que se llama en cada ciclo del behavior tree para que el nodo realice su tarea
 BT::NodeStatus
 GetWaypoint::tick()
 {
+  // Establecemos el waypoint como salida del nodo
   setOutput("waypoint", wp_);
-  return BT::NodeStatus::SUCCESS;
+  
+  // El nodo ha tenido éxito (se ha llegado al waypoint)
+  return BT::NodeStatus::SUCCESS;  
 }
 
-}  // namespace bt_nav_wp
+
+}
 
 #include "behaviortree_cpp_v3/bt_factory.h"
+
+// Registramos el nodo en el sistema de Behavior Tree para poder usarlo dentro de BTs
 BT_REGISTER_NODES(factory)
 {
   factory.registerNodeType<bt_nav_wp::GetWaypoint>("GetWaypoint");
