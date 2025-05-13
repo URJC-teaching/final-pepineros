@@ -63,7 +63,7 @@ Move::on_success()
   // Imprimimos un mensaje indicando que la navegación fue exitosa
   RCLCPP_INFO(node_->get_logger(), "** NAVIGATION SUCCEEDED **");
 
-  // Devolvemos el estado de éxito al behavior tree
+  // Devolvemos el estado de éxito al behavior tree para pasar a la siguiente acción
   return BT::NodeStatus::SUCCESS;  
 }
 

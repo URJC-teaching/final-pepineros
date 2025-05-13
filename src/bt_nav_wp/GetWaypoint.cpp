@@ -66,15 +66,15 @@ GetWaypoint::GetWaypoint(
   tf2::Quaternion q;
 
   // Establecemos el cuaternión usando los valores de Roll, Pitch y Yaw
-  q.setRPY(0.0, 0.0, yaw_);
+  q.setRPY(0.0, 0.0, yaw_); // Solo necesitamos yaw
 
   // Asignamos las componentes del cuaternion
   wp_.pose.orientation.x = q.x();  
   wp_.pose.orientation.y = q.y();  
-  wp_.pose.orientation.z = q.z();  
-  wp_.pose.orientation.w = q.w();
+  wp_.pose.orientation.z = q.z(); 
+  wp_.pose.orientation.w = q.w();  // Angulo de rotación total
 
-
+}
 // Generalmente se usa este metodo para detener o limpiar la acción
 void
 GetWaypoint::halt()
